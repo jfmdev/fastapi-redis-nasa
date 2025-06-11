@@ -1,0 +1,23 @@
+.max-width-100 {
+  max-width: 100%;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-danger {
+  color: red;
+}
+
+.text-info {
+  color: blueviolet;
+}
+
+.text-muted {
+  color: gray;
+}

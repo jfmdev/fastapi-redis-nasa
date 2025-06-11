@@ -1,12 +1,48 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>FastAPI Static Files</title>
-  <link rel="stylesheet" href="/static/pure-3.0.0-min.css">
-</head>
-<body>
-  <h1>Hello from FastAPI</h1>
-  <div x-data="{ message: 'I ❤️ Python' }" x-text="message"></div>
-  <script src="/static/alpinejs-4.14.8-min.js"></script>
-</body>
+  <head>
+    <title>FastAPI Static Files</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="/static/alpinejs-4.14.8-min.js" defer></script>
+    <script>
+      function imageApp() {
+        return {
+          data: null,
+          loading: true,
+          error: null,
+          apiEndpoint: '/image',
+      
+          async fetch() {
+            this.loading = true;
+            this.error = null;
+            try {
+              const response = await fetch(this.apiEndpoint);
+              if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`HTTP error: ${response.status} - ${errorText}`);
+              }
+              this.data = await response.json();
+            } catch (e) {
+              console.error("Failed to fetch:", e);
+              this.error = e.message;
+            } finally {
+              this.loading = false;
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <h1 class="text-center">Hello from FastAPI</h1>
+    <div x-data="imageApp()" x-init="fetch()" class="text-center">
+      <div x-show="loading" class="text-info">Loading image...</div>
+      <div x-show="!loading && error" class="text-danger" x-text="error"></div>
+      <div x-show="!loading && !error && data">
+        <img x-bind:src="data && data.url" x-bind:title="data && data.title" alt="No image" class="max-width-100" />
+        <div x-text="data && data.title" class="text-bold"></div>
+        <div x-text="data && data.explanation" class="text-muted"></div>
+      </div>
+    </div>
+  </body>
 </html>
