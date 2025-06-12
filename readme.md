@@ -1,16 +1,25 @@
 # FastAPI example
 
-> A simple project that showcases how to create and run a FastAPI application.
+> A simple project that showcases how to create and run a FastAPI application (integrated with an external API and Redis).
 
 ## Requirements
 
-1. Create a `.env` file in the "/app" folder.
-2. Visit [api.nasa.gov](https://api.nasa.gov/) and request a free API key.
-3. Add the key to your `.env` file like this:
+To run this application, you'll need the following:
 
+* An API key from [api.nasa.gov](https://api.nasa.gov/) (you can request one for free).
+* A running Redis instance.
+
+After obtaining these, create a `.env` file inside the `/app` directory with the following content:
+
+```env
+NASA_API_KEY=your_nasa_api_key_here
+REDIS_HOST=your_redis_host
+REDIS_PORT=your_redis_port
 ```
-NASA_API_KEY=your_api_key_here
-```
+
+Make sure the API key and Redis URL are correct and accessible from your environment.
+
+> Note that you don’t need to set the Redis variables manually if you're using Docker Compose (on this case the environment is configured automatically).
 
 ## Running locally
 
@@ -18,7 +27,7 @@ You can run the project using a Python virtual environment or Docker.
 
 ### Using a Virtual Environment
 
-```
+```bash
 # Create a virtual environment (only once)
 python3 -m venv ./my-env
 
@@ -37,14 +46,44 @@ uvicorn main:app --reload
 
 The app will be available at http://localhost:8000
 
+> Nota that you can install Redis via the [official installer](https://redis.io/) or use Docker as described bellow.
+
 ### Using Docker
 
+You can run both the FastAPI application and Redis using Docker Compose (recommended), or you can manage containers manually.
+
+#### Docker Compose
+
+```bash
+docker compose up
 ```
+
+This will build and start both the FastAPI app and Redis service automatically.
+
+#### Manual Docker setup
+
+##### Start Redis with Docker
+
+```bash
+# Run Redis container (first time)
+docker run -d --name fastapi-example-redis -p 6379:6379 redis
+
+# Start Redis if it's already created
+docker start fastapi-example-redis
+```
+
+Redis will be available at: `redis://localhost:6379`
+
+> To stop the Redis container when you're done: `docker stop fastapi-example-redis`
+
+##### Main application
+
+```bash
 # Build the Docker image (only once)
-docker build -t fastapi-example ./app
+docker build -t fastapi-example-main ./app
 
 # Run the Docker container
-docker run -p 8000:8000 fastapi-example
+docker run -p 8000:8000 fastapi-example-main
 ```
 
 The app will be accessible at http://localhost:8000

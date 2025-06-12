@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+
+  redis:
+    image: redis:7
+    container_name: fastapi-example-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+
+  fastapi:
+    build:
+      context: ./app
+    container_name: fastapi-example-main
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    ports:
+      - "8000:8000"
+    networks:
+      - backend
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+networks:
+  backend:
+    driver: bridge
