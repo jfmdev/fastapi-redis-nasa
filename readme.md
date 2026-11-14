@@ -1,6 +1,12 @@
 # FastAPI example
 
-> A simple project that showcases how to create and run a FastAPI application (integrated with an external API and Redis).
+A lightweight web application that brings NASA's Astronomy Picture of the Day (APOD) to a simple browser-based interface.
+
+Each time the page loads, it requests the day's astronomy image and its title and explanation from a FastAPI endpoint. The endpoint retrieves the content from NASA's APOD API and stores the response in Redis for four hours, avoiding repeated external requests while the cached data is available.
+
+The frontend is served as static HTML and CSS, with Alpine.js handling the request and displaying the image details or an error message.
+
+Together, these pieces provide a small example of building a Python web application that connects to an external API and uses Redis for caching.
 
 ## Requirements
 
