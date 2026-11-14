@@ -1,4 +1,6 @@
-# FastAPI example
+# FastAPI Redis Nasa
+
+> An example application built with FastAPI, Redis and Alpine.js
 
 A lightweight web application that brings NASA's Astronomy Picture of the Day (APOD) to a simple browser-based interface.
 
